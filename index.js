@@ -4,8 +4,8 @@ const express = require("express")
 const app = express()
 const cors = require("cors")
 
-const userRoute = require("./components/user/user.router")
-const contactRoute = require("./components/contact/contact.router")
+const userRoute = require("./components/user/user.controller")
+const contactRoute = require("./components/contact/contact.controller")
 
 app.use(cors())
 app.use(express.json())
