@@ -1,11 +1,13 @@
-require("dotenv").config
+require("dotenv").config()
 require("express-async-errors")
 const express = require("express")
 const app = express()
 const cors = require("cors")
 
-const userRoute = require("./components/user/user.controller")
-const contactRoute = require("./components/contact/contact.controller")
+const userRoute = require("./components/user/user.router")
+const contactRoute = require("./components/contact/contact.router")
+
+const errorHandlerMiddleware = require("./middleware/error-handler")
 
 app.use(cors())
 app.use(express.json())
@@ -16,7 +18,9 @@ app.get('/', (req, res) => {
 
 app.use("/", userRoute, contactRoute)
 
-const PORT = process.env.PORT || 3000
+app.use(errorHandlerMiddleware)
+
+const PORT = process.env.PORT || 5000
 
 // const userOne = new User("john", "doe", true, true)
 // users.push(userOne)
