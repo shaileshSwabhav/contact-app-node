@@ -35,14 +35,18 @@ class User {
     this.isActive = isActive
   }
 
-  addContact(fname, lname, isActive) {
+  addContact(fname, lname, isActive, contactDetails) {
     if (this.isAdmin) {
       throw new CustomError.BadRequestError("Admins cannot add contacts")
     }
 
     const contact = new Contact(fname, lname, isActive, this.id)
+
+    for (let index = 0; index < contactDetails.length; index++) {
+      contact.addContactDetails(contactDetails[index].type, contactDetails[index].number, contactDetails[index.email])
+    }
+
     this.contacts.push(contact)
-    console.log(this.contacts);
   }
 
   updateContact(contact, contactID) {

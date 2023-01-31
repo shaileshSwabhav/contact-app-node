@@ -1,8 +1,8 @@
 const { v4 } = require('uuid');
-const ContactDetail = require("./contact-detail") 
+const { ContactDetail } = require("./contact-detail")
 
 class Contact {
-  constructor (fname, lname, isActive, userID) {
+  constructor(fname, lname, isActive, userID) {
     this.id = v4()
     this.fname = fname
     this.lname = lname
@@ -18,6 +18,12 @@ class Contact {
 
   setIsActive(isActive) {
     this.isActive = isActive
+  }
+
+  addContactDetails(type, number, email) {
+    const detail = new ContactDetail(type, number, email, this.id)
+    this.contactDetails.push(detail)
+    console.log(this.contactDetails);
   }
 }
 

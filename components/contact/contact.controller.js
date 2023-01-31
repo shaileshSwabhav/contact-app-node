@@ -7,9 +7,15 @@ const addContact = (req, res) => {
     const userID = req.params.userID
     const userIndex = doesUserExist(userID)
 
-    const { fname, lname, isActive } = req.body
+    const { fname, lname, isActive, contactDetails } = req.body
 
-    users[userIndex].addContact(fname, lname, isActive)
+    console.log("contactDetails is array -> ", Array.isArray(contactDetails));
+
+    if (!Array.isArray(contactDetails)) {
+      throw new CustomError.BadRequestError("Contact details must array of details")
+    } 
+
+    users[userIndex].addContact(fname, lname, isActive, contactDetails)
 
     res.status(StatusCodes.CREATED).json(null)
   } catch (error) {

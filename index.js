@@ -17,7 +17,6 @@ app.get('/', (req, res) => {
 })
 
 app.use("/", userRoute, contactRoute)
-
 app.use(errorHandlerMiddleware)
 
 const PORT = process.env.PORT || 5000

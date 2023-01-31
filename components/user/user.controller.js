@@ -5,21 +5,30 @@ const CustomError = require("../../errors")
 const { comparePassword, hashPassword } = require("../../security/password")
 
 const addUser = async (req, res) => {
-  const { fname, lname, email, password, isAdmin, isActive } = req.body
+  try {
+    const { fname, lname, email, password, isAdmin, isActive } = req.body
+
+    validateUniqueEmail(email)
+
+    const hashedPassword = await hashPassword(password)
+
+    const user = new User(fname, lname, email, hashedPassword, isAdmin, isActive)
+    users.push(user)
+
+    res.status(StatusCodes.CREATED).json(null)
+  } catch (error) {
+    console.error(error);
+    throw new CustomError.BadRequestError(error)
+  }
+}
+
+const validateUniqueEmail = (email) => {
 
   for (let index = 0; index < users.length; index++) {
     if (email == users[index].email) {
-      res.status(StatusCodes.BAD_REQUEST).json("Email already exist")
-      return
+      throw new CustomError.BadRequestError("Email already exist")
     }
   }
-
-  const hashedPassword = await hashPassword(password)
-
-  const user = new User(fname, lname, email, hashedPassword, isAdmin, isActive)
-  users.push(user)
-
-  res.status(StatusCodes.CREATED).json(null)
 }
 
 const login = async (req, res) => {
@@ -113,8 +122,13 @@ const deleteUser = (req, res) => {
   res.status(StatusCodes.ACCEPTED).json(null)
 }
 
-const getUsers = (req, res) => {
-  res.status(StatusCodes.OK).json(users)
+const getUsers = async (req, res) => {
+  try {
+    res.status(StatusCodes.OK).json(users)
+  } catch (error) {
+    console.error(error);
+    throw new CustomError.BadRequestError(error)
+  }
 }
 
 module.exports = { addUser, updateUser, deleteUser, getUsers, login }
