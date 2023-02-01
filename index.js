@@ -8,18 +8,22 @@ const cookieParser = require('cookie-parser')
 const userRoute = require("./components/user/user.router")
 const contactRoute = require("./components/contact/contact.router")
 
+const notFoundMiddleware = require("./middleware/not-found")
 const errorHandlerMiddleware = require("./middleware/error-handler")
 
 app.use(cors())
 app.use(express.json())
 app.use(cookieParser())
 
+
 app.get('/', (req, res) => {
   res.send("Welcome to Contact App")
 })
 
 app.use("/", userRoute, contactRoute)
+
 app.use(errorHandlerMiddleware)
+app.use(notFoundMiddleware)
 
 const PORT = process.env.PORT || 5000
 

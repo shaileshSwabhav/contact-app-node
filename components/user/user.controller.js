@@ -1,35 +1,27 @@
 const { StatusCodes } = require('http-status-codes')
-const { User, users } = require("../../view")
 const JwtToken = require("../../middleware/jwt")
-const CustomError = require("../../errors")
 const { comparePassword, hashPassword } = require("../../security/password")
+const { userCreate } = require('./user.service')
+const { User, users } = require("../../view")
 
-const addUser = async (req, res) => {
+const addUser = async (req, res, next) => {
   // let fetchedCookie = req.cook
   try {
     const { fname, lname, email, password, isAdmin, isActive } = req.body
-
-    validateUniqueEmail(email)
 
     const hashedPassword = await hashPassword(password)
 
     // this should be part of service.
     const user = new User(fname, lname, email, hashedPassword, isAdmin, isActive)
-    users.push(user)
+    await userCreate(user)
 
     res.status(StatusCodes.CREATED).json(null)
   } catch (error) {
     console.error(error);
-    throw new CustomError.BadRequestError(error)
-  }
-}
-
-const validateUniqueEmail = (email) => {
-
-  for (let index = 0; index < users.length; index++) {
-    if (email == users[index].email) {
-      throw new CustomError.BadRequestError("Email already exist")
-    }
+    next(error)
+    // throw new CustomError.BadRequestError({
+    //   error: "user could not be added"
+    // })
   }
 }
 
