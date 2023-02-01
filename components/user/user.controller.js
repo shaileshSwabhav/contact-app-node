@@ -5,6 +5,7 @@ const CustomError = require("../../errors")
 const { comparePassword, hashPassword } = require("../../security/password")
 
 const addUser = async (req, res) => {
+  // let fetchedCookie = req.cook
   try {
     const { fname, lname, email, password, isAdmin, isActive } = req.body
 
@@ -12,6 +13,7 @@ const addUser = async (req, res) => {
 
     const hashedPassword = await hashPassword(password)
 
+    // this should be part of service.
     const user = new User(fname, lname, email, hashedPassword, isAdmin, isActive)
     users.push(user)
 
@@ -57,7 +59,7 @@ const login = async (req, res) => {
     const jwt = new JwtToken(users[userIndex])
     const token = jwt.generateToken()
 
-    // res.cookie('token', token)
+    res.cookie('token', token)
 
     res.status(StatusCodes.OK).json({
       token: token,
@@ -73,8 +75,6 @@ const login = async (req, res) => {
 const updateUser = (req, res) => {
 
   const userID = req.params.userID
-  console.log(userID);
-
   let user = new User()
 
   // check if user exist
@@ -102,8 +102,6 @@ const updateUser = (req, res) => {
 
 const deleteUser = (req, res) => {
   const userID = req.params.userID
-  console.log(userID);
-
   let userIndex = -1
 
   for (let index = 0; index < users.length; index++) {

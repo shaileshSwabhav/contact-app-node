@@ -3,6 +3,7 @@ require("express-async-errors")
 const express = require("express")
 const app = express()
 const cors = require("cors")
+const cookieParser = require('cookie-parser')
 
 const userRoute = require("./components/user/user.router")
 const contactRoute = require("./components/contact/contact.router")
@@ -11,6 +12,7 @@ const errorHandlerMiddleware = require("./middleware/error-handler")
 
 app.use(cors())
 app.use(express.json())
+app.use(cookieParser())
 
 app.get('/', (req, res) => {
   res.send("Welcome to Contact App")

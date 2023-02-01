@@ -27,37 +27,37 @@ class JwtToken {
   }
 
   static validateToken(req, res, next) {
-    // let cookie = req.headers.cookie
-    // console.log("cookie -> ", cookie);
-    // if (!cookie) {
-    //   throw new CustomError.UnauthorizedError("Cookie not found")
+    let cookie = req.cookies
+    console.log("cookie -> ", cookie);
+    if (!cookie) {
+      throw new CustomError.UnauthorizedError("Cookie not found")
+    }
+
+    try {
+      const decoded = jwt.verify(cookie['token'], process.env.JWT_SECRET);
+      console.log(decoded);
+      next();
+    } catch (error) {
+      console.error(error);
+      throw new CustomError.UnauthenticatedError("route cannot be acccessed");
+    }
+
+    // const authHeader = req.headers.authorization;
+
+    // if (!authHeader || !authHeader.startsWith("Bearer")) {
+    //   throw new CustomError.UnauthorizedError("token not provided");
     // }
 
+    // const token = authHeader.split(" ")[1];
+
     // try {
-    //   const decoded = jwt.verify(cookie['token'], process.env.JWT_SECRET);
-    //   console.log(decoded);
+    //   const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    //   // console.log("decoded -> ", decoded);
     //   next();
     // } catch (error) {
     //   console.log(error);
-    //   throw new CustomError.UnauthenticatedError("route cannot be acccessed");
+    //   throw new CustomError.UnauthorizedError("route cannot be acccessed");
     // }
-
-    const authHeader = req.headers.authorization;
-
-    if (!authHeader || !authHeader.startsWith("Bearer")) {
-      throw new CustomError.UnauthorizedError("token not provided");
-    }
-
-    const token = authHeader.split(" ")[1];
-
-    try {
-      const decoded = jwt.verify(token, process.env.JWT_SECRET);
-      // console.log("decoded -> ", decoded);
-      next();
-    } catch (error) {
-      console.log(error);
-      throw new CustomError.UnauthorizedError("route cannot be acccessed");
-    }
 
   }
 }

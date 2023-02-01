@@ -14,8 +14,6 @@ class User {
     this.isActive = isActive
     this.isAdmin = isAdmin // if user is not admin then consider them as staff
     this.contacts = []
-
-    console.log(this);
   }
 
   setName(fname, lname) {
@@ -60,6 +58,23 @@ class User {
         this.contacts[index].setIsActive(contact.isActive)
       }
     }
+  }
+
+  static findUser(userID) {
+    let userIndex = -1
+  
+    for (let index = 0; index < users.length; index++) {
+      if (userID == users[index].id) {
+        userIndex = index
+        break
+      }
+    }
+  
+    if (userIndex == -1 || !users[userIndex].isActive) {
+      throw new CustomError.BadRequestError("user not found")
+    }
+  
+    return [userIndex,false]
   }
 }
 

@@ -10,6 +10,7 @@ class Contact {
     this.userID = userID
     this.contactDetails = []
   }
+  // - npx sequelize-cli model:generate --name user --attributes firstName:string,lastName:string,email:string
 
   setName(fname, lname) {
     this.fname = fname
@@ -23,7 +24,6 @@ class Contact {
   addContactDetails(type, number, email) {
     const detail = new ContactDetail(type, number, email, this.id)
     this.contactDetails.push(detail)
-    console.log(this.contactDetails);
   }
 }
 
