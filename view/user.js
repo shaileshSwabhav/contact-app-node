@@ -16,6 +16,10 @@ class User {
     this.contacts = []
   }
 
+  setID(id) {
+    this.id = id
+  }
+
   setName(fname, lname) {
     this.fname = fname
     this.lname = lname
@@ -23,6 +27,10 @@ class User {
 
   setEmail(email) {
     this.email = email
+  }
+
+  setPassword(password) {
+    this.password = password
   }
 
   setIsAdmin(isAdmin) {
@@ -62,19 +70,19 @@ class User {
 
   static findUser(userID) {
     let userIndex = -1
-  
+
     for (let index = 0; index < users.length; index++) {
       if (userID == users[index].id) {
         userIndex = index
         break
       }
     }
-  
+
     if (userIndex == -1 || !users[userIndex].isActive) {
       throw new CustomError.BadRequestError("user not found")
     }
-  
-    return [userIndex,false]
+
+    return [userIndex, false]
   }
 }
 

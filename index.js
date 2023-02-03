@@ -4,9 +4,9 @@ const express = require("express")
 const app = express()
 const cors = require("cors")
 const cookieParser = require('cookie-parser')
-
-const userRoute = require("./components/user/user.router")
-const contactRoute = require("./components/contact/contact.router")
+const route = require("./components")
+// const userRoute = require("./components/user")
+// const contactRoute = require("./components/contact")
 
 const notFoundMiddleware = require("./middleware/not-found")
 const errorHandlerMiddleware = require("./middleware/error-handler")
@@ -20,7 +20,7 @@ app.get('/', (req, res) => {
   res.send("Welcome to Contact App")
 })
 
-app.use("/", userRoute, contactRoute)
+app.use("/", route)
 
 app.use(errorHandlerMiddleware)
 app.use(notFoundMiddleware)
@@ -32,7 +32,6 @@ const PORT = process.env.PORT || 5000
 
 // const userTwo = new User("adam", "domingo", true, true)
 // users.push(userTwo)
-
 
 // console.log(users);
 const startApp = async () => {

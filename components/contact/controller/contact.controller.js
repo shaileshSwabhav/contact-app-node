@@ -1,6 +1,6 @@
 const { StatusCodes } = require('http-status-codes')
-const CustomError = require("../../errors")
-const { User, Contact, users } = require("../../view")
+const CustomError = require("../../../errors")
+const { User, Contact, users } = require("../../../view")
 
 const addContact = (req, res) => {
   try {
