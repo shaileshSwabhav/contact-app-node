@@ -1,19 +1,18 @@
 const { StatusCodes } = require('http-status-codes')
 const CustomError = require("../../../errors")
 const { User, Contact, users } = require("../../../view")
+const { ContactService } = require("../service/contact.service")
 
-const addContact = (req, res) => {
+const addContact = async (req, res) => {
   try {
     const userID = req.params.userID
-    const userIndex = User.findUser(userID)
 
     const { fname, lname, isActive, contactDetails } = req.body
 
-    if (!Array.isArray(contactDetails)) {
-      throw new CustomError.BadRequestError("Contact details must array of details")
-    } 
+    const contact = new Contact(fname, lname, isActive, userID)
+    const contactServ = new ContactService()
 
-    users[userIndex].addContact(fname, lname, isActive, contactDetails)
+    await contactServ.addContact(contact)
 
     res.status(StatusCodes.CREATED).json(null)
   } catch (error) {

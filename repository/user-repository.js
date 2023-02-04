@@ -44,9 +44,9 @@ class UserRepository {
       queryparams = queryparams || {}
 
       const user = await db.User.findOne({
-        where: queryparams
+        where: queryparams,
       })
-      console.log(user);
+
       return user
     } catch (error) {
       console.error(error);

@@ -1,16 +1,17 @@
 const db = require("../../../models")
 const CustomError = require("../../../errors")
 const { UserRepository } = require("../../../repository");
+const { Repository } = require("../../../repository")
 
 class UserService {
   async userCreate(user) {
     const transaction = await db.sequelize.transaction();
 
     try {
-      const userRepo = new UserRepository()
+      const userRepo = new Repository(db.User)
 
-      await userRepo.validateUniqueEmail(user, transaction)
-      await userRepo.createUser(user, transaction)
+      // await userRepo.validateUniqueEmail(user, transaction)
+      await userRepo.create(user, transaction)
       // users.push(user)
 
       await transaction.commit()
@@ -59,7 +60,6 @@ class UserService {
       const user = await userRepo.getUser({ email: email })
       await transaction.commit()
 
-      console.log("user -> ", user);
       return user
     } catch (error) {
       await transaction.rollback()
